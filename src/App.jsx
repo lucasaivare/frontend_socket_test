@@ -5,6 +5,7 @@ import "./App.css";
 function App() {
   //Public API that will echo messages sent to it back to the client
   const url = "ws://127.0.0.1:8000/ws/" + "room" + "/";
+  const [urlInput, setUrlInput] = useState(url);
   const [socketUrl, setSocketUrl] = useState(url);
   const [messageHistory, setMessageHistory] = useState([]);
 
@@ -17,7 +18,7 @@ function App() {
   }, [lastMessage, setMessageHistory]);
 
   const handleClickChangeSocketUrl = useCallback(
-    () => setSocketUrl(socketUrl),
+    () => setSocketUrl(urlInput),
     []
   );
 
@@ -36,8 +37,8 @@ function App() {
       <label htmlFor="room">URL</label>
       <input
         id="room"
-        value={socketUrl}
-        onChange={(e) => setSocketUrl(e.target.value)}
+        value={urlInput}
+        onChange={(e) => setUrlInput(e.target.value)}
       />
       <button onClick={handleClickChangeSocketUrl}>
         Click Me to change Socket Url
