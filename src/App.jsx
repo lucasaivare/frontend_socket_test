@@ -3,29 +3,29 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import "./App.css";
 
 function App() {
-  //Public API that will echo messages sent to it back to the client
-  const testMessage = {
-    type: "type",
-    text: "text",
-    sender: "sender",
-  };
-  const url = "ws://127.0.0.1:8000/ws/" + "room" + "/";
+  const url = "ws://192.168.0.9:8000/ws/" + "room" + "/";
   const [urlInput, setUrlInput] = useState(url);
   const [socketUrl, setSocketUrl] = useState(url);
   const [messageHistory, setMessageHistory] = useState([]);
-  const [messageInput, setMessageInput] = useState(JSON.stringify(testMessage));
+  const [messageInput, setMessageInput] = useState(
+    JSON.stringify({
+      type: "type",
+      text: "text",
+      sender: "sender",
+    })
+  );
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   useEffect(() => {
     if (lastMessage !== null) {
+      console.log(
+        "🚀 ~ file: App.jsx:22 ~ useEffect ~ lastMessage:",
+        lastMessage
+      );
       setMessageHistory((prev) => prev.concat(lastMessage));
     }
   }, [lastMessage, setMessageHistory]);
-
-  const handleClickSendMessage = useCallback(() => {
-    sendMessage(messageInput);
-  }, []);
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -41,7 +41,10 @@ function App() {
       <textarea
         id="message"
         value={messageInput}
-        onChange={(e) => setMessageInput(e.target.value)}
+        onChange={(e) => {
+          console.log(e.target.value);
+          setMessageInput(e.target.value);
+        }}
       />
       <label htmlFor="room">URL</label>
       <input
@@ -53,7 +56,7 @@ function App() {
         Click Me to change Socket Url
       </button>
       <button
-        onClick={handleClickSendMessage}
+        onClick={() => sendMessage(messageInput)}
         disabled={readyState !== ReadyState.OPEN}
       >
         Click Me to send 'Hello'
