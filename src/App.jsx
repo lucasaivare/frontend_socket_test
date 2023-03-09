@@ -17,12 +17,17 @@ function App() {
     }
   }, [lastMessage, setMessageHistory]);
 
-  const handleClickChangeSocketUrl = useCallback(
-    () => setSocketUrl(urlInput),
-    []
-  );
-
-  const handleClickSendMessage = useCallback(() => sendMessage("Hello"), []);
+  const handleClickSendMessage = useCallback(() => {
+    const testMessage = {
+      test: true,
+      message: {
+        type: "Deu",
+        body: "Brasil",
+        footer: "Caraio",
+      },
+    };
+    sendMessage(JSON.stringify(testMessage));
+  }, []);
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -40,7 +45,7 @@ function App() {
         value={urlInput}
         onChange={(e) => setUrlInput(e.target.value)}
       />
-      <button onClick={handleClickChangeSocketUrl}>
+      <button onClick={() => setSocketUrl(urlInput)}>
         Click Me to change Socket Url
       </button>
       <button
