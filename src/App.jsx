@@ -41,7 +41,7 @@ function App() {
       <textarea
         id="message"
         value={messageInput}
-        onChange={(e) => setMessageInput(JSON.stringify(e.target.value))}
+        onChange={(e) => setMessageInput(e.target.value)}
       />
       <label htmlFor="room">URL</label>
       <input
