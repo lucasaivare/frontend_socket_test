@@ -4,10 +4,16 @@ import "./App.css";
 
 function App() {
   //Public API that will echo messages sent to it back to the client
+  const testMessage = {
+    type: "type",
+    text: "text",
+    sender: "sender",
+  };
   const url = "ws://127.0.0.1:8000/ws/" + "room" + "/";
   const [urlInput, setUrlInput] = useState(url);
   const [socketUrl, setSocketUrl] = useState(url);
   const [messageHistory, setMessageHistory] = useState([]);
+  const [messageInput, setMessageInput] = useState(JSON.stringify(testMessage));
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
@@ -18,15 +24,7 @@ function App() {
   }, [lastMessage, setMessageHistory]);
 
   const handleClickSendMessage = useCallback(() => {
-    const testMessage = {
-      test: true,
-      message: {
-        type: "Deu",
-        body: "Brasil",
-        footer: "Caraio",
-      },
-    };
-    sendMessage(JSON.stringify(testMessage));
+    sendMessage(messageInput);
   }, []);
 
   const connectionStatus = {
@@ -39,6 +37,12 @@ function App() {
 
   return (
     <div className="container">
+      <label htmlFor="message">Message</label>
+      <textarea
+        id="message"
+        value={messageInput}
+        onChange={(e) => setMessageInput(JSON.stringify(e.target.value))}
+      />
       <label htmlFor="room">URL</label>
       <input
         id="room"
